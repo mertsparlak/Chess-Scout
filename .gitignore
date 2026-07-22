@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.venv
+venv/
+ENV/
+
+# Binaries & Large Engine Executables
+backend/bin/
+*.exe
+
+# Node & Frontend
+frontend/node_modules/
+frontend/dist/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Antigravity system logs
+.system_generated/
