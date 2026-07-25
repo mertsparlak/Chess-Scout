@@ -32,7 +32,7 @@ GRANDMASTER_DATABASE = [
             "RiskTaking": 96,
             "TimePressureResistance": 80,
             "TreeDiversityIndex": 70,
-            "GreedIndex": 85,
+            "GreedIndex": 75,
             "EndgameSkill": 70
         },
         "description": "Karmaşık, seziye dayalı feda ve taktik tuzaklarla oyunu kaosa sürüklemeyi seven stil."
@@ -117,7 +117,7 @@ GRANDMASTER_DATABASE = [
             "RiskTaking": 75,
             "TimePressureResistance": 99,
             "TreeDiversityIndex": 75,
-            "GreedIndex": 55,
+            "GreedIndex": 40,
             "EndgameSkill": 88
         },
         "description": "Zaman baskısında devleşen, beklenmedik savunma kaynakları bulan ve yıldırım hızında taktik hesaplayan stil."
@@ -134,14 +134,13 @@ GRANDMASTER_DATABASE = [
             "RiskTaking": 85,
             "TimePressureResistance": 70,
             "TreeDiversityIndex": 35,
-            "GreedIndex": 60,
+            "GreedIndex": 55,
             "EndgameSkill": 75
         },
         "description": "Hızlı taş gelişimi, açık dikey sürüşleri ve merkeze hızlı hakimiyet kuran klasik atak stili."
     }
 ]
 
-# Feature importance weights for distance calculation
 FEATURE_WEIGHTS = {
     "Aggression": 1.3,
     "TacticalSkill": 1.4,
@@ -149,17 +148,13 @@ FEATURE_WEIGHTS = {
     "RiskTaking": 1.2,
     "TimePressureResistance": 1.0,
     "TreeDiversityIndex": 0.8,
-    "GreedIndex": 1.1,
+    "GreedIndex": 1.0,
     "EndgameSkill": 1.1
 }
 
 class GMSimilarityEngine:
     @staticmethod
     def compute_similarity(user_scores: Dict[str, int]) -> Dict[str, Any]:
-        """
-        Computes weighted Euclidean similarity percentages between user scores and GM profiles.
-        Returns top matches, user archetype classification, and radar comparison overlay data.
-        """
         matches = []
 
         for gm in GRANDMASTER_DATABASE:
@@ -174,8 +169,8 @@ class GMSimilarityEngine:
                 weighted_sum += weight * (diff ** 2)
 
             distance = math.sqrt(weighted_sum / total_weight)
-            # Map distance (0 to ~60) to similarity percentage (100% to ~20%)
-            similarity_pct = max(15.0, min(99.0, round(100.0 - (distance * 1.55), 1)))
+            # Calibrated distance mapping to similarity %
+            similarity_pct = max(15.0, min(99.0, round(100.0 - (distance * 1.15), 1)))
 
             matches.append({
                 "id": gm["id"],
@@ -187,7 +182,6 @@ class GMSimilarityEngine:
                 "gm_scores": gm_scores
             })
 
-        # Sort matches by similarity percentage descending
         matches.sort(key=lambda x: x["similarity_pct"], reverse=True)
 
         top_match = matches[0]

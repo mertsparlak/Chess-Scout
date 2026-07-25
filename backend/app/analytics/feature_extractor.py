@@ -91,7 +91,6 @@ class FeatureExtractor:
                 eco_performance[eco]["cpl_sum"] += cpl
                 eco_performance[eco]["count"] += 1
 
-                # Opening vs Midgame phase tracking
                 if step < 10:
                     opening_cpl.append(cpl)
                 else:
@@ -154,16 +153,24 @@ class FeatureExtractor:
         acpl = sum(cpl_list) / max(1, len(cpl_list))
         overall_accuracy = round(max(15.0, min(99.0, 100.0 * math.exp(-0.0035 * acpl))), 1)
 
-        # Opening vs Midgame Accuracy & Out-of-Book Drop
         opening_acpl = sum(opening_cpl) / max(1, len(opening_cpl)) if opening_cpl else acpl
         midgame_acpl = sum(midgame_cpl) / max(1, len(midgame_cpl)) if midgame_cpl else acpl
         opening_acc = round(max(15.0, min(99.0, 100.0 * math.exp(-0.0035 * opening_acpl))), 1)
         midgame_acc = round(max(15.0, min(99.0, 100.0 * math.exp(-0.0035 * midgame_acpl))), 1)
         out_of_book_drop = round(max(0.0, opening_acc - midgame_acc), 1)
 
-        # Behavioral Ratios
-        greed_index = min(100, int((capture_blunders / max(1, blunder_count)) * 100))
-        cascade_blunder_risk = min(100, int((cascade_blunders / max(1, total_initial_errors)) * 100))
+        # Behavioral Ratios (with small-sample noise damping for low blunder counts)
+        if blunder_count == 0:
+            greed_index = 25
+        elif blunder_count <= 2:
+            greed_index = int((capture_blunders / blunder_count) * 45)
+        else:
+            greed_index = min(100, int((capture_blunders / blunder_count) * 100))
+
+        if total_initial_errors <= 2:
+            cascade_blunder_risk = int((cascade_blunders / max(1, total_initial_errors)) * 30)
+        else:
+            cascade_blunder_risk = min(100, int((cascade_blunders / total_initial_errors) * 100))
 
         normal_blunder_rate = (normal_time_blunders / max(1, normal_time_moves)) * 100
         time_panic_blunder_rate = (time_panic_blunders / max(1, time_panic_moves)) * 100
