@@ -3,6 +3,7 @@ from app.services.pgn_parser import PGNParser
 from app.analytics.stockfish_eval import StockfishEvaluator
 from app.analytics.feature_extractor import FeatureExtractor
 from app.analytics.counter_strategy import CounterStrategyGenerator
+from app.analytics.gm_similarity import GMSimilarityEngine
 
 SAMPLE_PGN = """
 [Event "Rated Blitz game"]
@@ -61,3 +62,22 @@ def test_feature_extractor_and_counter_strategy():
     assert "donts" in strategy
     assert "exploitation_steps" in strategy
     assert len(strategy["exploitation_steps"]) > 0
+
+def test_gm_similarity_engine():
+    mock_scores = {
+        "Aggression": 90,
+        "TacticalSkill": 95,
+        "PositionalSkill": 80,
+        "RiskTaking": 85,
+        "TimePressureResistance": 80,
+        "TreeDiversityIndex": 75,
+        "GreedIndex": 45,
+        "EndgameSkill": 85
+    }
+    result = GMSimilarityEngine.compute_similarity(mock_scores)
+    assert "top_matches" in result
+    assert len(result["top_matches"]) == 4
+    assert "archetype" in result
+    assert result["top_matches"][0]["similarity_pct"] > 70.0
+    # Aggressive & tactical mock scores should match Kasparov or Tal as top match
+    assert result["top_matches"][0]["id"] in ["kasparov", "tal", "morphy", "nakamura"]

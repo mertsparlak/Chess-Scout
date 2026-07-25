@@ -12,6 +12,7 @@ from app.analytics.stockfish_eval import StockfishEvaluator
 from app.analytics.feature_extractor import FeatureExtractor
 from app.analytics.counter_strategy import CounterStrategyGenerator
 from app.analytics.tactical_detector import TacticalDetector
+from app.analytics.gm_similarity import GMSimilarityEngine
 
 app = FastAPI(
     title="ChessMind Intelligence Platform API",
@@ -156,10 +157,12 @@ def _process_pgn_analysis(pgn_text: str, target_username: Optional[str] = None) 
 
     profile = FeatureExtractor.extract_player_profile(games, target_username, eval_data)
     strategy = CounterStrategyGenerator.generate_strategy(profile)
+    gm_similarity = GMSimilarityEngine.compute_similarity(profile.get("scores", {}))
 
     return {
         "target_username": target_username,
         "profile": profile,
         "counter_strategy": strategy,
+        "gm_similarity": gm_similarity,
         "games_analyzed": len(games)
     }

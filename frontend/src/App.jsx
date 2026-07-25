@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend } from 'recharts';
 
 export default function App() {
   const [username, setUsername] = useState('mertparlaks');
@@ -9,6 +9,7 @@ export default function App() {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
   const [health, setHealth] = useState(null);
+  const [showGMOverlay, setShowGMOverlay] = useState(true);
 
   useEffect(() => {
     checkHealth();
@@ -54,30 +55,33 @@ export default function App() {
     }
   };
 
-  const getRadarData = (scores) => {
-    if (!scores) return [];
+  // Convert profile scores + GM scores to Recharts radar format
+  const getRadarData = (userScores, gmScores) => {
+    if (!userScores) return [];
     return [
-      { subject: 'Agresiflik', A: scores.Aggression || 50 },
-      { subject: 'Taktik Yetenek', A: scores.TacticalSkill || 50 },
-      { subject: 'Pozisyonel', A: scores.PositionalSkill || 50 },
-      { subject: 'Zaman Direnci', A: scores.TimePressureResistance || 50 },
-      { subject: 'Açılış Çeşitliliği', A: scores.TreeDiversityIndex || 50 },
-      { subject: 'Tilt Katsayısı', A: scores.TiltIndex || 0 },
-      { subject: 'Aşırı Açgözlülük', A: scores.GreedIndex || 0 },
-      { subject: 'Moral Çöküş Riski', A: scores.CascadeBlunderRisk || 0 },
+      { subject: 'Agresiflik', Oyuncu: userScores.Aggression || 50, GM: gmScores?.Aggression || 50 },
+      { subject: 'Taktik Yetenek', Oyuncu: userScores.TacticalSkill || 50, GM: gmScores?.TacticalSkill || 50 },
+      { subject: 'Pozisyonel', Oyuncu: userScores.PositionalSkill || 50, GM: gmScores?.PositionalSkill || 50 },
+      { subject: 'Zaman Direnci', Oyuncu: userScores.TimePressureResistance || 50, GM: gmScores?.TimePressureResistance || 50 },
+      { subject: 'Açılış Çeşitliliği', Oyuncu: userScores.TreeDiversityIndex || 50, GM: gmScores?.TreeDiversityIndex || 50 },
+      { subject: 'Tilt Katsayısı', Oyuncu: userScores.TiltIndex || 0, GM: gmScores?.TiltIndex || 0 },
+      { subject: 'Aşırı Açgözlülük', Oyuncu: userScores.GreedIndex || 0, GM: gmScores?.GreedIndex || 0 },
+      { subject: 'Moral Çöküş Riski', Oyuncu: userScores.CascadeBlunderRisk || 0, GM: gmScores?.CascadeBlunderRisk || 0 },
     ];
   };
+
+  const primaryGM = data?.gm_similarity?.primary_match;
 
   return (
     <div className="app-root">
       {/* Header */}
       <header className="app-header">
         <div className="brand-logo">
-          <span>♟️</span> ChessMind AI
+          <span>♟️</span> Chess-Scout
         </div>
         <div className="status-badge">
           <span className="dot-online"></span>
-          {health ? (health.stockfish_available ? 'Stockfish Engine Online' : 'Smart Heuristic Engine Mode') : 'API Status: Offline'}
+          {health ? (health.stockfish_available ? 'Stockfish 16.1 Online' : 'Smart Heuristic Mode') : 'API Status: Offline'}
         </div>
       </header>
 
@@ -85,9 +89,9 @@ export default function App() {
         {/* Search Panel */}
         <div className="glass-panel search-card">
           <div>
-            <h1 className="search-title">Chess Player Intelligence & Exploitation Platform</h1>
+            <h1 className="search-title">Chess-Scout: Player Intelligence & GM Matching</h1>
             <p className="search-subtitle">
-              Oyuncuların davranış kalıplarını, tuzak zayıflıklarını ve psikolojik kırılma noktalarını analiz eder.
+              Oyuncuların psikolojik davranış kalıplarını, zayıflıklarını ve efsanevi Büyükustalarla stil benzerliğini analiz eder.
             </p>
           </div>
 
@@ -141,7 +145,7 @@ export default function App() {
                 <div className="metric-label">Kazanma Oranı</div>
               </div>
               <div className="metric-card">
-                <div className="metric-value">%{data.profile.summary.avg_accuracy_pct || 82}</div>
+                <div className="metric-value">%{data.profile.summary.avg_accuracy_pct}</div>
                 <div className="metric-label">Ort. Hamle Doğruluğu</div>
               </div>
               <div className="metric-card">
@@ -154,17 +158,58 @@ export default function App() {
               </div>
             </div>
 
+            {/* Archetype & Top GM Similarity Hero Banner */}
+            {data.gm_similarity && (
+              <div className="glass-panel" style={{ padding: '1.5rem', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(168, 85, 247, 0.12) 100%)', border: '1px solid rgba(168, 85, 247, 0.3)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div>
+                    <span style={{ fontSize: '0.85rem', color: '#a855f7', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }}>
+                      OYUNCU KİMLİĞİ (ARCHETYPE)
+                    </span>
+                    <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#fff', marginTop: '0.2rem' }}>
+                      {data.gm_similarity.archetype.badge}
+                    </h2>
+                    <p style={{ color: '#d1d5db', fontSize: '1rem', marginTop: '0.4rem' }}>
+                      {data.gm_similarity.archetype.tagline}
+                    </p>
+                  </div>
+
+                  <div className="metric-card" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.15)', padding: '1rem 1.5rem' }}>
+                    <div className="metric-label" style={{ color: '#9ca3af' }}>En Çok Benzeyen Büyükusta</div>
+                    <div className="metric-value" style={{ fontSize: '1.8rem', color: '#a855f7' }}>
+                      %{primaryGM.similarity_pct} {primaryGM.name}
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: '#6b7280', marginTop: '0.2rem' }}>{primaryGM.title}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="analytics-grid">
-              {/* Left Column: Player Profile Radar & Behavioral Badges */}
+              {/* Left Column: Player Profile Radar & GM Overlay */}
               <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <h2 className="card-title">📊 {data.target_username} Oyuncu Profili</h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h2 className="card-title" style={{ margin: 0 }}>📊 {data.target_username} vs {primaryGM?.name}</h2>
+                  <button 
+                    type="button"
+                    onClick={() => setShowGMOverlay(!showGMOverlay)}
+                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid var(--border-color)', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}
+                  >
+                    {showGMOverlay ? '👁️ Sadece Oyuncuyu Göster' : '⚔️ GM Kıyaslamasını Aç'}
+                  </button>
+                </div>
+
                 <div style={{ width: '100%', height: 320 }}>
                   <ResponsiveContainer>
-                    <RadarChart cx="50%" cy="50%" outerRadius="75%" data={getRadarData(data.profile.scores)}>
+                    <RadarChart cx="50%" cy="50%" outerRadius="75%" data={getRadarData(data.profile.scores, primaryGM?.gm_scores)}>
                       <PolarGrid stroke="rgba(255,255,255,0.1)" />
                       <PolarAngleAxis dataKey="subject" stroke="#9ca3af" tick={{ fill: '#d1d5db', fontSize: 11 }} />
                       <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="rgba(255,255,255,0.1)" />
-                      <Radar name="Player" dataKey="A" stroke="#6366f1" fill="#6366f1" fillOpacity={0.4} />
+                      <Radar name={data.target_username} dataKey="Oyuncu" stroke="#6366f1" fill="#6366f1" fillOpacity={0.4} />
+                      {showGMOverlay && (
+                        <Radar name={primaryGM?.name} dataKey="GM" stroke="#a855f7" fill="#a855f7" fillOpacity={0.25} />
+                      )}
+                      <Legend />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
@@ -199,8 +244,29 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Right Column: Exploitation Blueprint Script & Strategy */}
+              {/* Right Column: GM Match Rankings & Exploitation Blueprint */}
               <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {/* GM Match Rankings */}
+                {data.gm_similarity && (
+                  <div>
+                    <h2 className="card-title" style={{ fontSize: '1.15rem' }}>🏆 Büyükusta Stil Benzerliği Listesi</h2>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.75rem' }}>
+                      {data.gm_similarity.top_matches.map((gm) => (
+                        <div key={gm.id} style={{ background: 'rgba(255,255,255,0.03)', padding: '0.8rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.3rem' }}>
+                            <span style={{ fontWeight: 600, color: '#fff' }}>{gm.name} <span style={{ fontSize: '0.8rem', color: '#9ca3af' }}>({gm.title})</span></span>
+                            <span style={{ fontWeight: 800, color: gm.similarity_pct > 75 ? '#a855f7' : '#6366f1' }}>%{gm.similarity_pct}</span>
+                          </div>
+                          <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden' }}>
+                            <div style={{ width: `${gm.similarity_pct}%`, height: '100%', background: gm.similarity_pct > 75 ? 'linear-gradient(90deg, #6366f1, #a855f7)' : '#6366f1', borderRadius: '3px' }}></div>
+                          </div>
+                          <div style={{ fontSize: '0.8rem', color: '#6b7280', marginTop: '0.4rem' }}>{gm.description}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <h2 className="card-title">🎯 Rakip Manipülasyon Rehberi (Exploitation Blueprint)</h2>
 
                 <div className="strategy-item strategy-insight">
