@@ -159,18 +159,12 @@ class FeatureExtractor:
         midgame_acc = round(max(15.0, min(99.0, 100.0 * math.exp(-0.0035 * midgame_acpl))), 1)
         out_of_book_drop = round(max(0.0, opening_acc - midgame_acc), 1)
 
-        # Behavioral Ratios (with small-sample noise damping for low blunder counts)
-        if blunder_count == 0:
-            greed_index = 25
-        elif blunder_count <= 2:
-            greed_index = int((capture_blunders / blunder_count) * 45)
-        else:
-            greed_index = min(100, int((capture_blunders / blunder_count) * 100))
+        # Game-Normalized Frequency Metrics (Eliminates small-sample noise for GMs)
+        # Greed Index: Scaled by capture blunders per 10 games
+        greed_index = min(100, int((capture_blunders / max(1, total_games)) * 120))
 
-        if total_initial_errors <= 2:
-            cascade_blunder_risk = int((cascade_blunders / max(1, total_initial_errors)) * 30)
-        else:
-            cascade_blunder_risk = min(100, int((cascade_blunders / total_initial_errors) * 100))
+        # Cascade Blunder Risk: Scaled by cascade blunders per 10 games
+        cascade_blunder_risk = min(100, int((cascade_blunders / max(1, total_games)) * 120))
 
         normal_blunder_rate = (normal_time_blunders / max(1, normal_time_moves)) * 100
         time_panic_blunder_rate = (time_panic_blunders / max(1, time_panic_moves)) * 100
