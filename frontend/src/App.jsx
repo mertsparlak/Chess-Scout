@@ -145,40 +145,40 @@ export default function App() {
             </button>
           </form>
 
-          {/* Lichess Token Toggle with localStorage Persistence */}
+          {/* Lichess Token Toggle with localStorage Persistence & Prominent Styling */}
           {platform === 'lichess' && (
-            <div style={{ marginTop: '0.4rem', fontSize: '0.85rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <div style={{ marginTop: '0.6rem', fontSize: '0.95rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
                 <button
                   type="button"
                   onClick={() => setShowTokenInput(!showTokenInput)}
-                  style={{ background: 'none', border: 'none', color: '#a855f7', cursor: 'pointer', padding: 0, textDecoration: 'underline', fontWeight: 600 }}
+                  style={{ background: 'none', border: 'none', color: '#c084fc', cursor: 'pointer', padding: 0, textDecoration: 'underline', fontWeight: 700, fontSize: '0.95rem' }}
                 >
-                  {showTokenInput ? '🔑 Token Ayarlarını Gizle' : '🔑 Lichess API Token Ayarları (429 Sınır Engeli için)'}
+                  {showTokenInput ? '🔑 Token Ayarlarını Gizle' : '🔑 Lichess API Token Ayarları (Sınırsız İzin İçin)'}
                 </button>
 
                 {lichessToken.trim() ? (
-                  <span style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '0.2rem 0.6rem', borderRadius: '12px', fontSize: '0.75rem', border: '1px solid rgba(16, 185, 129, 0.3)', fontWeight: 600 }}>
-                    ✓ Lichess Token Kayıtlı (Sınırsız İzin)
+                  <span style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '0.3rem 0.8rem', borderRadius: '14px', fontSize: '0.85rem', border: '1px solid rgba(16, 185, 129, 0.4)', fontWeight: 700 }}>
+                    ✓ Lichess Token Kayıtlı (Sınırsız İzin Aktif)
                   </span>
                 ) : (
-                  <span style={{ color: '#9ca3af', fontSize: '0.75rem' }}>
+                  <span style={{ color: '#9ca3af', fontSize: '0.85rem' }}>
                     (İsteğe bağlı - Sınırsız sorgulama için)
                   </span>
                 )}
               </div>
 
               {showTokenInput && (
-                <div style={{ marginTop: '0.5rem', background: 'rgba(168, 85, 247, 0.08)', padding: '0.85rem', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
-                  <div style={{ color: '#d1d5db', marginBottom: '0.5rem', fontSize: '0.8rem', lineHeight: '1.4' }}>
-                    Lichess anonim sorgularda IP başına dakikada 1 maça izin verir. <a href="https://lichess.org/account/oauth/token" target="_blank" rel="noreferrer" style={{ color: '#a855f7', fontWeight: 600 }}>Buraya tıklayarak 10 saniyede ücretsiz Lichess API Token alabilirsiniz.</a> Token tarayıcınıza bir kez kaydedilir ve PC kapansa bile sonraki açılışlarda otomatik kullanılır.
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div style={{ marginTop: '0.75rem', background: 'rgba(168, 85, 247, 0.12)', padding: '1.1rem 1.25rem', borderRadius: '12px', border: '1px solid rgba(168, 85, 247, 0.35)' }}>
+                  <p style={{ color: '#e5e7eb', marginBottom: '0.75rem', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                    Lichess sunucularında anonim (token'sız) sorgularda API istekleri sınırlıdır. <a href="https://lichess.org/account/oauth/token" target="_blank" rel="noreferrer" style={{ color: '#c084fc', fontWeight: 700, textDecoration: 'underline' }}>Buraya tıklayarak 10 saniyede ücretsiz Lichess API Token alabilirsiniz.</a> Token tarayıcınıza bir kez kaydedilir ve PC kapansa bile sonraki açılışlarda otomatik kullanılır.
+                  </p>
+                  <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <input
                       type="password"
                       className="input-field"
-                      style={{ flex: 1, fontSize: '0.85rem', padding: '0.5rem 0.8rem' }}
-                      placeholder="Lichess Personal Access Token (lip_...)"
+                      style={{ flex: 1, fontSize: '0.95rem', padding: '0.75rem 1rem', background: 'rgba(0, 0, 0, 0.4)', color: '#ffffff', border: '1px solid rgba(168, 85, 247, 0.4)' }}
+                      placeholder="Lichess Personal Access Token yapıştırın (lip_...)"
                       value={lichessToken}
                       onChange={(e) => setLichessToken(e.target.value)}
                     />
@@ -186,7 +186,7 @@ export default function App() {
                       <button
                         type="button"
                         onClick={() => setLichessToken('')}
-                        style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.4)', color: '#ef4444', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem' }}
+                        style={{ background: 'rgba(239, 68, 68, 0.25)', border: '1px solid rgba(239, 68, 68, 0.5)', color: '#f87171', padding: '0.6rem 1.2rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 700 }}
                       >
                         Sil
                       </button>
@@ -198,7 +198,7 @@ export default function App() {
           )}
 
           {error && (
-            <div style={{ color: '#ef4444', padding: '0.8rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.2)', marginTop: '0.5rem' }}>
+            <div style={{ color: '#ef4444', padding: '1rem', background: 'rgba(239, 68, 68, 0.12)', borderRadius: '10px', border: '1px solid rgba(239, 68, 68, 0.3)', marginTop: '0.75rem', fontSize: '0.95rem', lineHeight: '1.4' }}>
               ⚠️ {error}
             </div>
           )}

@@ -17,7 +17,6 @@ class LichessService:
         """
         clean_user = username.strip()
 
-        # Get token from function arg, env var, or None
         token = api_token or os.environ.get("LICHESS_TOKEN") or os.environ.get("LICHESS_API_TOKEN")
 
         headers = {
@@ -56,12 +55,12 @@ class LichessService:
             return response.text
         elif response.status_code == 429:
             raise RuntimeError(
-                "Lichess API IP oran sınırına takıldı (HTTP 429 Rate Limit). "
-                "Lichess anonim sorgularda IP başına dakikada 1 indirmeye izin vermektedir. "
-                "Arayüze veya backend/.env dosyasına ücretsiz bir Lichess Personal Access Token girerek bu engeli anında kaldırabilirsiniz."
+                "Lichess API istek sınırına takıldı (HTTP 429 Rate Limit). "
+                "Lichess anonim sorgularda API isteklerini sınırlamaktadır. "
+                "Arayüzdeki '🔑 Lichess API Token Ayarları' bölümünden ücretsiz bir Lichess API Token girerek bu engeli anında kaldırabilirsiniz."
             )
         elif response.status_code == 401:
-            raise RuntimeError("Girilen Lichess API Token geçersiz veya süresi dolmuş.")
+            raise RuntimeError("Girilen Lichess API Token geçersiz veya süresi dolmuş. Lütfen token'ınızı kontrol edin.")
         elif response.status_code == 404:
             raise ValueError(f"'{clean_user}' kullanıcısının oyun arşivi bulunamadı.")
         else:
