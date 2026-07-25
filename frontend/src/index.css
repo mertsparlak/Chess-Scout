@@ -157,16 +157,32 @@ body {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
+/* High Contrast Dropdown Select & Option Styling */
 .select-field {
-  background: rgba(255, 255, 255, 0.05);
+  background: #121a2b;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 0.8rem 1.2rem;
-  color: #fff;
+  color: #ffffff;
   font-family: var(--font-sans);
   font-size: 1rem;
+  font-weight: 600;
   outline: none;
   cursor: pointer;
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+
+.select-field:focus {
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.select-field option {
+  background-color: #121a2b;
+  color: #ffffff;
+  padding: 0.8rem;
+  font-weight: 500;
 }
 
 .btn-primary {

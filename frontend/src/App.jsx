@@ -5,7 +5,12 @@ export default function App() {
   const [username, setUsername] = useState('mertparlaks');
   const [platform, setPlatform] = useState('lichess');
   const [maxGames, setMaxGames] = useState(15);
-  const [lichessToken, setLichessToken] = useState('');
+  
+  // Persistent Lichess Token stored in browser localStorage
+  const [lichessToken, setLichessToken] = useState(() => {
+    return localStorage.getItem('chess_scout_lichess_token') || '';
+  });
+  
   const [showTokenInput, setShowTokenInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -16,6 +21,15 @@ export default function App() {
   useEffect(() => {
     checkHealth();
   }, []);
+
+  // Save or clear lichessToken in localStorage whenever it changes
+  useEffect(() => {
+    if (lichessToken.trim()) {
+      localStorage.setItem('chess_scout_lichess_token', lichessToken.trim());
+    } else {
+      localStorage.removeItem('chess_scout_lichess_token');
+    }
+  }, [lichessToken]);
 
   const checkHealth = async () => {
     try {
@@ -131,30 +145,53 @@ export default function App() {
             </button>
           </form>
 
-          {/* Lichess Token Toggle for Rate Limit Bypass */}
+          {/* Lichess Token Toggle with localStorage Persistence */}
           {platform === 'lichess' && (
             <div style={{ marginTop: '0.4rem', fontSize: '0.85rem' }}>
-              <button
-                type="button"
-                onClick={() => setShowTokenInput(!showTokenInput)}
-                style={{ background: 'none', border: 'none', color: '#a855f7', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
-              >
-                {showTokenInput ? '🔑 API Token Kutusunu Gizle' : '🔑 Lichess 429 Oran Sınırı Engeli mi var? (İsteğe Bağlı Lichess API Token Ekle)'}
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setShowTokenInput(!showTokenInput)}
+                  style={{ background: 'none', border: 'none', color: '#a855f7', cursor: 'pointer', padding: 0, textDecoration: 'underline', fontWeight: 600 }}
+                >
+                  {showTokenInput ? '🔑 Token Ayarlarını Gizle' : '🔑 Lichess API Token Ayarları (429 Sınır Engeli için)'}
+                </button>
+
+                {lichessToken.trim() ? (
+                  <span style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '0.2rem 0.6rem', borderRadius: '12px', fontSize: '0.75rem', border: '1px solid rgba(16, 185, 129, 0.3)', fontWeight: 600 }}>
+                    ✓ Lichess Token Kayıtlı (Sınırsız İzin)
+                  </span>
+                ) : (
+                  <span style={{ color: '#9ca3af', fontSize: '0.75rem' }}>
+                    (İsteğe bağlı - Sınırsız sorgulama için)
+                  </span>
+                )}
+              </div>
 
               {showTokenInput && (
-                <div style={{ marginTop: '0.5rem', background: 'rgba(168, 85, 247, 0.08)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
-                  <div style={{ color: '#d1d5db', marginBottom: '0.4rem', fontSize: '0.8rem' }}>
-                    Lichess anonim IP sorgularında IP başına dakikada 1 maça izin verir. <a href="https://lichess.org/account/oauth/token" target="_blank" rel="noreferrer" style={{ color: '#a855f7' }}>Buraya tıklayarak 10 saniyede ücretsiz bir Lichess API Token alabilirsiniz.</a>
+                <div style={{ marginTop: '0.5rem', background: 'rgba(168, 85, 247, 0.08)', padding: '0.85rem', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                  <div style={{ color: '#d1d5db', marginBottom: '0.5rem', fontSize: '0.8rem', lineHeight: '1.4' }}>
+                    Lichess anonim sorgularda IP başına dakikada 1 maça izin verir. <a href="https://lichess.org/account/oauth/token" target="_blank" rel="noreferrer" style={{ color: '#a855f7', fontWeight: 600 }}>Buraya tıklayarak 10 saniyede ücretsiz Lichess API Token alabilirsiniz.</a> Token tarayıcınıza bir kez kaydedilir ve PC kapansa bile sonraki açılışlarda otomatik kullanılır.
                   </div>
-                  <input
-                    type="password"
-                    className="input-field"
-                    style={{ width: '100%', fontSize: '0.85rem', padding: '0.5rem' }}
-                    placeholder="Lichess Personal Access Token (lip_...)"
-                    value={lichessToken}
-                    onChange={(e) => setLichessToken(e.target.value)}
-                  />
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <input
+                      type="password"
+                      className="input-field"
+                      style={{ flex: 1, fontSize: '0.85rem', padding: '0.5rem 0.8rem' }}
+                      placeholder="Lichess Personal Access Token (lip_...)"
+                      value={lichessToken}
+                      onChange={(e) => setLichessToken(e.target.value)}
+                    />
+                    {lichessToken && (
+                      <button
+                        type="button"
+                        onClick={() => setLichessToken('')}
+                        style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.4)', color: '#ef4444', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem' }}
+                      >
+                        Sil
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
