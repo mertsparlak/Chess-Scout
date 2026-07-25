@@ -55,7 +55,6 @@ export default function App() {
     }
   };
 
-  // Convert profile scores + GM scores to Recharts radar format
   const getRadarData = (userScores, gmScores) => {
     if (!userScores) return [];
     return [
@@ -91,7 +90,7 @@ export default function App() {
           <div>
             <h1 className="search-title">Chess-Scout: Player Intelligence & GM Matching</h1>
             <p className="search-subtitle">
-              Oyuncuların psikolojik davranış kalıplarını, zayıflıklarını ve efsanevi Büyükustalarla stil benzerliğini analiz eder.
+              Oyuncuların psikolojik davranış kalıplarını, tuzak zayıflıklarını ve efsanevi Büyükustalarla stil benzerliğini analiz eder.
             </p>
           </div>
 
@@ -186,7 +185,7 @@ export default function App() {
             )}
 
             <div className="analytics-grid">
-              {/* Left Column: Player Profile Radar & GM Overlay */}
+              {/* Left Column: Player Profile Radar & Behavioral Badges */}
               <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <h2 className="card-title" style={{ margin: 0 }}>📊 {data.target_username} vs {primaryGM?.name}</h2>
@@ -214,31 +213,58 @@ export default function App() {
                   </ResponsiveContainer>
                 </div>
 
-                {/* Behavioral & Manipulation Metrics */}
-                <h3 style={{ fontSize: '1rem', color: '#a855f7', marginTop: '0.5rem' }}>🎭 Manipülasyon Göstergeleri</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                  <div className="metric-card">
-                    <div className="metric-label">Greed (Açgözlülük)</div>
-                    <div className="metric-value" style={{ color: data.profile.scores.GreedIndex > 50 ? '#ef4444' : '#10b981' }}>
-                      %{data.profile.scores.GreedIndex}
+                {/* Behavioral & Manipulation Metrics with Explanations */}
+                <div>
+                  <h3 style={{ fontSize: '1rem', color: '#a855f7', marginTop: '0.5rem', marginBottom: '0.75rem' }}>
+                    🎭 Psikolojik & Manipülasyon Göstergeleri
+                  </h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                    <div className="metric-card" style={{ textAlign: 'left', padding: '0.85rem 1rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="metric-label" style={{ fontWeight: 600 }}>Greed (Açgözlülük)</span>
+                        <span className="metric-value" style={{ fontSize: '1.25rem', color: data.profile.scores.GreedIndex > 50 ? '#ef4444' : '#10b981' }}>
+                          %{data.profile.scores.GreedIndex}
+                        </span>
+                      </div>
+                      <p style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.3rem', lineHeight: '1.3' }}>
+                        Zehirli piyonlara veya sahte feda tuzaklarına düşme meyli.
+                      </p>
                     </div>
-                  </div>
-                  <div className="metric-card">
-                    <div className="metric-label">Moral Çöküş Riski</div>
-                    <div className="metric-value" style={{ color: data.profile.scores.CascadeBlunderRisk > 30 ? '#ef4444' : '#10b981' }}>
-                      %{data.profile.scores.CascadeBlunderRisk}
+
+                    <div className="metric-card" style={{ textAlign: 'left', padding: '0.85rem 1rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="metric-label" style={{ fontWeight: 600 }}>Moral Çöküş Riski</span>
+                        <span className="metric-value" style={{ fontSize: '1.25rem', color: data.profile.scores.CascadeBlunderRisk > 30 ? '#ef4444' : '#10b981' }}>
+                          %{data.profile.scores.CascadeBlunderRisk}
+                        </span>
+                      </div>
+                      <p style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.3rem', lineHeight: '1.3' }}>
+                        İlk hatadan sonraki 3 hamlede 2. dev hatayı yapma riski.
+                      </p>
                     </div>
-                  </div>
-                  <div className="metric-card">
-                    <div className="metric-label">Tilt Katsayısı (Post-Loss)</div>
-                    <div className="metric-value" style={{ color: data.profile.scores.TiltIndex > 30 ? '#ef4444' : '#10b981' }}>
-                      %{data.profile.scores.TiltIndex}
+
+                    <div className="metric-card" style={{ textAlign: 'left', padding: '0.85rem 1rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="metric-label" style={{ fontWeight: 600 }}>Post-Loss Tilt</span>
+                        <span className="metric-value" style={{ fontSize: '1.25rem', color: data.profile.scores.TiltIndex > 30 ? '#ef4444' : '#10b981' }}>
+                          %{data.profile.scores.TiltIndex}
+                        </span>
+                      </div>
+                      <p style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.3rem', lineHeight: '1.3' }}>
+                        Mağlubiyet ardından oynanan maçta aşırı risk ve hata meyli.
+                      </p>
                     </div>
-                  </div>
-                  <div className="metric-card">
-                    <div className="metric-label">Aşırı Özgüven (Post-Win)</div>
-                    <div className="metric-value" style={{ color: '#f59e0b' }}>
-                      %{data.profile.scores.OverconfidenceIndex}
+
+                    <div className="metric-card" style={{ textAlign: 'left', padding: '0.85rem 1rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="metric-label" style={{ fontWeight: 600 }}>Post-Win Özgüven</span>
+                        <span className="metric-value" style={{ fontSize: '1.25rem', color: '#f59e0b' }}>
+                          %{data.profile.scores.OverconfidenceIndex}
+                        </span>
+                      </div>
+                      <p style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.3rem', lineHeight: '1.3' }}>
+                        Galibiyet ardından oynanan maçta dikkatsiz risk alma sıklığı.
+                      </p>
                     </div>
                   </div>
                 </div>
