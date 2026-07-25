@@ -5,6 +5,8 @@ export default function App() {
   const [username, setUsername] = useState('mertparlaks');
   const [platform, setPlatform] = useState('lichess');
   const [maxGames, setMaxGames] = useState(15);
+  const [lichessToken, setLichessToken] = useState('');
+  const [showTokenInput, setShowTokenInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
@@ -38,7 +40,12 @@ export default function App() {
       const res = await fetch('/api/analyze/user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, platform, max_games: Number(maxGames) })
+        body: JSON.stringify({
+          username,
+          platform,
+          max_games: Number(maxGames),
+          lichess_token: lichessToken.trim() || undefined
+        })
       });
 
       if (!res.ok) {
@@ -112,6 +119,7 @@ export default function App() {
               <option value="25">25 Oyun</option>
               <option value="50">50 Oyun</option>
             </select>
+
             <button type="submit" className="btn-primary" disabled={loading}>
               {loading ? (
                 <>
@@ -123,8 +131,37 @@ export default function App() {
             </button>
           </form>
 
+          {/* Lichess Token Toggle for Rate Limit Bypass */}
+          {platform === 'lichess' && (
+            <div style={{ marginTop: '0.4rem', fontSize: '0.85rem' }}>
+              <button
+                type="button"
+                onClick={() => setShowTokenInput(!showTokenInput)}
+                style={{ background: 'none', border: 'none', color: '#a855f7', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+              >
+                {showTokenInput ? '🔑 API Token Kutusunu Gizle' : '🔑 Lichess 429 Oran Sınırı Engeli mi var? (İsteğe Bağlı Lichess API Token Ekle)'}
+              </button>
+
+              {showTokenInput && (
+                <div style={{ marginTop: '0.5rem', background: 'rgba(168, 85, 247, 0.08)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                  <div style={{ color: '#d1d5db', marginBottom: '0.4rem', fontSize: '0.8rem' }}>
+                    Lichess anonim IP sorgularında IP başına dakikada 1 maça izin verir. <a href="https://lichess.org/account/oauth/token" target="_blank" rel="noreferrer" style={{ color: '#a855f7' }}>Buraya tıklayarak 10 saniyede ücretsiz bir Lichess API Token alabilirsiniz.</a>
+                  </div>
+                  <input
+                    type="password"
+                    className="input-field"
+                    style={{ width: '100%', fontSize: '0.85rem', padding: '0.5rem' }}
+                    placeholder="Lichess Personal Access Token (lip_...)"
+                    value={lichessToken}
+                    onChange={(e) => setLichessToken(e.target.value)}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
           {error && (
-            <div style={{ color: '#ef4444', padding: '0.8rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+            <div style={{ color: '#ef4444', padding: '0.8rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.2)', marginTop: '0.5rem' }}>
               ⚠️ {error}
             </div>
           )}

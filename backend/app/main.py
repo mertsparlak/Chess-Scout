@@ -32,6 +32,7 @@ class AnalyzeUserRequest(BaseModel):
     username: str
     platform: str = "lichess"
     max_games: int = 15
+    lichess_token: Optional[str] = None
 
 class AnalyzePGNRequest(BaseModel):
     pgn_text: str
@@ -56,7 +57,7 @@ def analyze_user(req: AnalyzeUserRequest):
 
     try:
         if platform == "lichess":
-            pgn_text = LichessService.fetch_user_games_pgn(username, max_games=max_games)
+            pgn_text = LichessService.fetch_user_games_pgn(username, max_games=max_games, api_token=req.lichess_token)
         elif platform == "chesscom":
             pgn_text = ChessComService.fetch_user_games_pgn(username, max_games=max_games)
         else:
@@ -64,7 +65,7 @@ def analyze_user(req: AnalyzeUserRequest):
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except RuntimeError as e:
-        status_code = 429 if "429" in str(e) else 502
+        status_code = 429 if "429" in str(e) or "sınır" in str(e) else 502
         raise HTTPException(status_code=status_code, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Oyun verileri alınırken bir hata oluştu: {str(e)}")
