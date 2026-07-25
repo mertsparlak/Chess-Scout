@@ -60,27 +60,30 @@ def analyze_user(req: AnalyzeUserRequest):
         elif platform == "chesscom":
             pgn_text = ChessComService.fetch_user_games_pgn(username, max_games=max_games)
         else:
-            raise HTTPException(status_code=400, detail="Platform must be 'lichess' or 'chesscom'")
+            raise HTTPException(status_code=400, detail="Platform 'lichess' veya 'chesscom' olmalıdır.")
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+    except RuntimeError as e:
+        status_code = 429 if "429" in str(e) else 502
+        raise HTTPException(status_code=status_code, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch games: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Oyun verileri alınırken bir hata oluştu: {str(e)}")
 
     if not pgn_text:
-        raise HTTPException(status_code=404, detail=f"No games found for player '{username}' on {platform}.")
+        raise HTTPException(status_code=404, detail=f"'{username}' kullanıcısı için {platform} üzerinde incelenecek oyun bulunamadı.")
 
     return _process_pgn_analysis(pgn_text, target_username=username)
 
 @app.post("/api/analyze/pgn")
 def analyze_pgn(req: AnalyzePGNRequest):
     if not req.pgn_text.strip():
-        raise HTTPException(status_code=400, detail="PGN text cannot be empty.")
+        raise HTTPException(status_code=400, detail="PGN metni boş olamaz.")
     return _process_pgn_analysis(req.pgn_text, target_username=req.target_username)
 
 def _process_pgn_analysis(pgn_text: str, target_username: Optional[str] = None) -> Dict[str, Any]:
     games = PGNParser.parse_pgn_text(pgn_text, target_username=target_username)
     if not games:
-        raise HTTPException(status_code=400, detail="Could not parse any valid games from PGN.")
+        raise HTTPException(status_code=400, detail="PGN verisinden geçerli oyun ayrıştırılamadı.")
 
     if not target_username and games:
         target_username = games[0]["white"]
