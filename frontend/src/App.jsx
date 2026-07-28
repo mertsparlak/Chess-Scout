@@ -145,7 +145,7 @@ export default function App() {
             </button>
           </form>
 
-          {/* Lichess Token Toggle with localStorage Persistence & Prominent Styling */}
+          {/* Lichess Token Toggle with localStorage Persistence */}
           {platform === 'lichess' && (
             <div style={{ marginTop: '0.6rem', fontSize: '0.95rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
@@ -253,6 +253,77 @@ export default function App() {
                       %{primaryGM.similarity_pct} {primaryGM.name}
                     </div>
                     <div style={{ fontSize: '0.8rem', color: '#6b7280', marginTop: '0.2rem' }}>{primaryGM.title}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Opening Repertoire & Weakness Matrix Section */}
+            {data.profile.repertoire && (
+              <div className="glass-panel" style={{ padding: '1.5rem' }}>
+                <h2 className="card-title" style={{ fontSize: '1.25rem', color: '#6366f1' }}>
+                  ♟️ Açılış Repertuarı & Zayıflık Haritası
+                </h2>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+                  {/* White Repertoire */}
+                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+                    <h3 style={{ fontSize: '0.95rem', color: '#e5e7eb', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      ⚪ En Çok Oynanan (Beyaz)
+                    </h3>
+                    {data.profile.repertoire.white_top && data.profile.repertoire.white_top.length > 0 ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        {data.profile.repertoire.white_top.map((item, idx) => (
+                          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#d1d5db', background: 'rgba(255,255,255,0.04)', padding: '0.4rem 0.75rem', borderRadius: '6px' }}>
+                            <span>{item.name}</span>
+                            <span style={{ fontWeight: 700, color: '#6366f1' }}>{item.count} oyun</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div style={{ fontSize: '0.85rem', color: '#9ca3af' }}>Veri yetersiz.</div>
+                    )}
+                  </div>
+
+                  {/* Black Repertoire */}
+                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+                    <h3 style={{ fontSize: '0.95rem', color: '#e5e7eb', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      ⚫ En Çok Oynanan (Siyah)
+                    </h3>
+                    {data.profile.repertoire.black_top && data.profile.repertoire.black_top.length > 0 ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        {data.profile.repertoire.black_top.map((item, idx) => (
+                          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#d1d5db', background: 'rgba(255,255,255,0.04)', padding: '0.4rem 0.75rem', borderRadius: '6px' }}>
+                            <span>{item.name}</span>
+                            <span style={{ fontWeight: 700, color: '#a855f7' }}>{item.count} oyun</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div style={{ fontSize: '0.85rem', color: '#9ca3af' }}>Veri yetersiz.</div>
+                    )}
+                  </div>
+
+                  {/* Weakest Openings (Vulnerability Alert) */}
+                  <div style={{ background: 'rgba(239, 68, 68, 0.06)', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(239, 68, 68, 0.25)' }}>
+                    <h3 style={{ fontSize: '0.95rem', color: '#ef4444', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      ⚠️ En Çok Zorlandığı 3 Açılış
+                    </h3>
+                    {data.profile.repertoire.weakest_openings && data.profile.repertoire.weakest_openings.length > 0 ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        {data.profile.repertoire.weakest_openings.map((item, idx) => (
+                          <div key={idx} style={{ display: 'flex', flexDirection: 'column', fontSize: '0.8rem', background: 'rgba(239, 68, 68, 0.1)', padding: '0.5rem 0.75rem', borderRadius: '6px', borderLeft: '3px solid #ef4444' }}>
+                            <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.85rem' }}>{item.eco} - {item.name}</div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.2rem', color: '#fca5a5' }}>
+                              <span>Kazanma: %{item.win_rate_pct}</span>
+                              <span>ACPL: {item.acpl}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div style={{ fontSize: '0.85rem', color: '#9ca3af' }}>Veri yetersiz.</div>
+                    )}
                   </div>
                 </div>
               </div>
