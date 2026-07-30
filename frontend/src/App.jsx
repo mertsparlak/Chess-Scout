@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend } from 'recharts';
+import { exportMarkdownReport, printPDFReport } from './utils/exporter';
 
 export default function App() {
   const [username, setUsername] = useState('mertparlaks');
@@ -91,6 +92,7 @@ export default function App() {
   };
 
   const primaryGM = data?.gm_similarity?.primary_match;
+  const timing = data?.profile?.blunder_timing;
 
   return (
     <div className="app-root">
@@ -207,6 +209,29 @@ export default function App() {
         {/* Dashboard Results Section */}
         {data && (
           <>
+            {/* Export Bar */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>
+                📋 Scouting Analiz Sonuçları ({data.target_username})
+              </div>
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <button
+                  type="button"
+                  onClick={() => printPDFReport()}
+                  style={{ background: 'rgba(99, 102, 241, 0.2)', border: '1px solid rgba(99, 102, 241, 0.4)', color: '#818cf8', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                >
+                  📄 PDF Raporu İndir
+                </button>
+                <button
+                  type="button"
+                  onClick={() => exportMarkdownReport(data)}
+                  style={{ background: 'rgba(168, 85, 247, 0.2)', border: '1px solid rgba(168, 85, 247, 0.4)', color: '#c084fc', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                >
+                  📝 Markdown Raporu İndir
+                </button>
+              </div>
+            </div>
+
             {/* Metric Summary Row */}
             <div className="metrics-row">
               <div className="metric-card">
@@ -324,6 +349,62 @@ export default function App() {
                     ) : (
                       <div style={{ fontSize: '0.85rem', color: '#9ca3af' }}>Veri yetersiz.</div>
                     )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Blunder Timing Distribution Panel */}
+            {timing && (
+              <div className="glass-panel" style={{ padding: '1.5rem' }}>
+                <h2 className="card-title" style={{ fontSize: '1.25rem', color: '#f59e0b' }}>
+                  ⏱️ Hata Zamanlama Dağılımı (Hangi Hamlede Çöküyor?)
+                </h2>
+
+                <div style={{ background: 'rgba(245, 158, 11, 0.08)', borderLeft: '4px solid #f59e0b', padding: '0.9rem 1.25rem', borderRadius: '8px', marginTop: '0.75rem', marginBottom: '1.25rem' }}>
+                  <div style={{ fontWeight: 700, color: '#fbbf24', fontSize: '0.95rem' }}>
+                    Baskın Çöküş Fazı: {timing.peak_phase}
+                  </div>
+                  <div style={{ color: '#d1d5db', fontSize: '0.85rem', marginTop: '0.2rem' }}>
+                    {timing.peak_description}
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                  {/* Opening Phase Moves 1-15 */}
+                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.9rem', color: '#e5e7eb', fontWeight: 600 }}>
+                      <span>Açılış (Hamle 1 - 15)</span>
+                      <span style={{ color: '#6366f1' }}>%{timing.opening_pct}</span>
+                    </div>
+                    <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.08)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ width: `${timing.opening_pct}%`, height: '100%', background: '#6366f1', borderRadius: '4px' }}></div>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginTop: '0.4rem' }}>{timing.opening_blunders} toplam blunder</div>
+                  </div>
+
+                  {/* Midgame Phase Moves 16-30 */}
+                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.9rem', color: '#e5e7eb', fontWeight: 600 }}>
+                      <span>Orta Oyun (Hamle 16 - 30)</span>
+                      <span style={{ color: '#a855f7' }}>%{timing.midgame_pct}</span>
+                    </div>
+                    <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.08)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ width: `${timing.midgame_pct}%`, height: '100%', background: '#a855f7', borderRadius: '4px' }}></div>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginTop: '0.4rem' }}>{timing.midgame_blunders} toplam blunder</div>
+                  </div>
+
+                  {/* Late Game Phase Moves 31+ */}
+                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.9rem', color: '#e5e7eb', fontWeight: 600 }}>
+                      <span>Oyun Sonu (Hamle 31+)</span>
+                      <span style={{ color: '#ef4444' }}>%{timing.late_pct}</span>
+                    </div>
+                    <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.08)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ width: `${timing.late_pct}%`, height: '100%', background: '#ef4444', borderRadius: '4px' }}></div>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginTop: '0.4rem' }}>{timing.late_blunders} toplam blunder</div>
                   </div>
                 </div>
               </div>

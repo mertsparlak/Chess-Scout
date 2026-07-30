@@ -17,6 +17,11 @@ class FeatureExtractor:
         inaccuracy_count = 0
         capture_blunders = 0
 
+        # Blunder Timing Distribution (Move Ranges)
+        opening_blunders = 0    # Moves 1-15
+        midgame_blunders = 0    # Moves 16-30
+        late_blunders = 0       # Moves 31+
+
         # Tactical Patterns
         fork_blunders = 0
         pin_blunders = 0
@@ -103,6 +108,16 @@ class FeatureExtractor:
 
                 if qual == "blunder":
                     blunder_count += 1
+
+                    # Categorize blunder timing by move step (0-indexed per ply)
+                    move_number = (step // 2) + 1
+                    if move_number <= 15:
+                        opening_blunders += 1
+                    elif move_number <= 30:
+                        midgame_blunders += 1
+                    else:
+                        late_blunders += 1
+
                     if patterns.get("is_capture"):
                         capture_blunders += 1
                     if patterns.get("is_fork"):
@@ -177,6 +192,22 @@ class FeatureExtractor:
 
         tree_diversity = min(100, int((len(opening_fen_set) / max(1, total_games * 4)) * 100))
 
+        # Blunder Timing Percentages
+        total_blunders_denom = max(1, blunder_count)
+        op_blunder_pct = round((opening_blunders / total_blunders_denom) * 100, 1)
+        mid_blunder_pct = round((midgame_blunders / total_blunders_denom) * 100, 1)
+        late_blunder_pct = round((late_blunders / total_blunders_denom) * 100, 1)
+
+        if late_blunders >= midgame_blunders and late_blunders >= opening_blunders:
+            peak_phase = "Oyun Sonu / Geç Aşama (Hamle 31+)"
+            peak_desc = f"Hataların %{late_blunder_pct}'si Hamle 31'den sonra yapılmaktadır. Rakibi oyunu uzatarak baskı altına alın."
+        elif midgame_blunders >= opening_blunders:
+            peak_phase = "Orta Oyun (Hamle 16 - 30)"
+            peak_desc = f"Hataların %{mid_blunder_pct}'si Hamle 16-30 arasında gerçekleşmektedir. Taş kırışmalarında karmaşıklık yaratın."
+        else:
+            peak_phase = "Erken Aşama / Açılış (Hamle 1 - 15)"
+            peak_desc = f"Hataların %{op_blunder_pct}'si ilk 15 hamlede oluşmaktadır. Teoriden erken çıkararak doğrudan saldırın."
+
         # Scaled Tactical & Positional scores matching ACPL scale
         tactical_score = max(15, min(99, int(100.0 * math.exp(-0.003 * acpl))))
         positional_score = max(20, min(99, int(100.0 * math.exp(-0.0025 * acpl))))
@@ -235,6 +266,16 @@ class FeatureExtractor:
                 "CascadeBlunderRisk": cascade_blunder_risk,
                 "EndgameSkill": endgame_score
             },
+            "blunder_timing": {
+                "opening_blunders": opening_blunders,
+                "midgame_blunders": midgame_blunders,
+                "late_blunders": late_blunders,
+                "opening_pct": op_blunder_pct,
+                "midgame_pct": mid_blunder_pct,
+                "late_pct": late_blunder_pct,
+                "peak_phase": peak_phase,
+                "peak_description": peak_desc
+            },
             "tactical_weaknesses": {
                 "fork_blunders": fork_blunders,
                 "pin_blunders": pin_blunders,
@@ -267,6 +308,11 @@ class FeatureExtractor:
                 "TacticalSkill": 50, "PositionalSkill": 50, "Aggression": 50, "RiskTaking": 50,
                 "TimePressureResistance": 50, "TreeDiversityIndex": 50, "TiltIndex": 0, "GreedIndex": 0,
                 "OverconfidenceIndex": 0, "CascadeBlunderRisk": 0, "EndgameSkill": 50
+            },
+            "blunder_timing": {
+                "opening_blunders": 0, "midgame_blunders": 0, "late_blunders": 0,
+                "opening_pct": 0, "midgame_pct": 0, "late_pct": 0,
+                "peak_phase": "Dengeli Dağılım", "peak_description": "Dev hata verisi yetersiz."
             },
             "tactical_weaknesses": {
                 "fork_blunders": 0, "pin_blunders": 0, "skewer_blunders": 0, "discovered_blunders": 0,
