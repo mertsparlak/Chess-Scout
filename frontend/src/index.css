@@ -307,3 +307,30 @@ body {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Print PDF Export Styles */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  .app-header, .search-card, button {
+    display: none !important;
+  }
+  .glass-panel {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: none !important;
+    color: #111827 !important;
+  }
+  .card-title, h1, h2, h3 {
+    color: #111827 !important;
+  }
+  .metric-card {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+  }
+  .metric-value {
+    color: #4f46e5 !important;
+  }
+}
