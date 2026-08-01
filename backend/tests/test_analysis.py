@@ -79,5 +79,22 @@ def test_gm_similarity_engine():
     assert len(result["top_matches"]) == 4
     assert "archetype" in result
     assert result["top_matches"][0]["similarity_pct"] > 70.0
-    # Aggressive & tactical mock scores should match Kasparov or Tal as top match
     assert result["top_matches"][0]["id"] in ["kasparov", "tal", "morphy", "nakamura"]
+
+def test_opening_vulnerabilities_and_blunder_timing():
+    games = PGNParser.parse_pgn_text(SAMPLE_PGN, target_username="PlayerA")
+    eval_data = [[
+        {"turn": "white", "cpl": 5, "accuracy": 98.0, "quality": "good", "clock_sec": 180.0, "patterns": {}},
+        {"turn": "white", "cpl": 250, "accuracy": 35.0, "quality": "blunder", "clock_sec": 120.0, "patterns": {"is_capture": True}},
+        {"turn": "white", "cpl": 300, "accuracy": 20.0, "quality": "blunder", "clock_sec": 45.0, "patterns": {}},
+    ]]
+    profile = FeatureExtractor.extract_player_profile(games, "PlayerA", eval_data)
+
+    assert "repertoire" in profile
+    assert "weakest_openings" in profile["repertoire"]
+    assert len(profile["repertoire"]["weakest_openings"]) > 0
+    assert profile["repertoire"]["weakest_openings"][0]["eco"] == "C50"
+
+    assert "blunder_timing" in profile
+    assert "peak_phase" in profile["blunder_timing"]
+    assert profile["blunder_timing"]["opening_blunders"] + profile["blunder_timing"]["midgame_blunders"] + profile["blunder_timing"]["late_blunders"] == 2
