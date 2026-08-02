@@ -31,7 +31,7 @@ app.add_middleware(
 class AnalyzeUserRequest(BaseModel):
     username: str
     platform: str = "lichess"
-    max_games: int = 15
+    max_games: int = 10
     lichess_token: Optional[str] = None
 
 class AnalyzePGNRequest(BaseModel):

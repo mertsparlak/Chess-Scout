@@ -5,7 +5,7 @@ import { exportMarkdownReport, printPDFReport } from './utils/exporter';
 export default function App() {
   const [username, setUsername] = useState('mertparlaks');
   const [platform, setPlatform] = useState('lichess');
-  const [maxGames, setMaxGames] = useState(15);
+  const [maxGames, setMaxGames] = useState(10);
   
   // Persistent Lichess Token stored in browser localStorage
   const [lichessToken, setLichessToken] = useState(() => {
@@ -132,8 +132,7 @@ export default function App() {
             <select className="select-field" value={maxGames} onChange={(e) => setMaxGames(Number(e.target.value))}>
               <option value="10">10 Oyun</option>
               <option value="15">15 Oyun</option>
-              <option value="25">25 Oyun</option>
-              <option value="50">50 Oyun</option>
+              <option value="20">20 Oyun</option>
             </select>
 
             <button type="submit" className="btn-primary" disabled={loading}>
