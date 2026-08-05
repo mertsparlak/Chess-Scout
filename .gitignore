@@ -19,5 +19,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Daily Pusher Script
+push_next_commit.ps1
+
 # Antigravity system logs
 .system_generated/
