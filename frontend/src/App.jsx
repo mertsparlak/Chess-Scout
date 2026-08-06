@@ -97,25 +97,24 @@ export default function App() {
 
   return (
     <div className="app-root">
-      {/* Grandmaster Intelligence Header */}
+      {/* Minimalist Linear-Style Header */}
       <header className="app-header">
         <div className="brand-logo">
-          <span className="brand-icon">👑</span>
-          <span>CHESS<span className="brand-text-gold">-SCOUT</span> INTEL</span>
+          <span className="brand-badge">♟</span> CHESS-SCOUT
         </div>
         <div className="status-badge">
           <span className="dot-online"></span>
-          {health ? (health.stockfish_available ? 'Stockfish 16.1 Online' : 'Smart Heuristic Engine') : 'API Offline'}
+          {health ? (health.stockfish_available ? 'Stockfish 16.1 Active' : 'Heuristic Engine') : 'Offline'}
         </div>
       </header>
 
       <main className="dashboard-container">
-        {/* Search & Scouting Query Card */}
-        <div className="glass-panel search-card">
+        {/* Search Panel */}
+        <div className="panel-card search-card">
           <div>
-            <h1 className="search-title">Grandmaster Player Scouting & Behavior Engine</h1>
+            <h1 className="search-title">Player Scouting & Intelligence Engine</h1>
             <p className="search-subtitle">
-              Rakip oyuncunun psikolojik zaaflarını, tuzak meylini, hamle çöküş hamlesini ve efsanevi Büyükustalarla stil benzerliğini analiz edin.
+              Oyuncuların psikolojik davranış kalıplarını, zayıf açılışlarını ve efsanevi Büyükustalarla stil benzerliğini analiz edin.
             </p>
           </div>
 
@@ -123,7 +122,7 @@ export default function App() {
             <input
               type="text"
               className="input-field"
-              placeholder="Oyuncu Kullanıcı Adı (ör: hikaru, drnykterstein, matteorf2b)"
+              placeholder="Oyuncu Kullanıcı Adı (ör: hikaru, drnykterstein)"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -150,37 +149,37 @@ export default function App() {
 
           {/* Lichess Token Toggle */}
           {platform === 'lichess' && (
-            <div style={{ marginTop: '0.4rem', fontSize: '0.95rem' }}>
+            <div style={{ marginTop: '0.2rem', fontSize: '0.85rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
                 <button
                   type="button"
                   onClick={() => setShowTokenInput(!showTokenInput)}
-                  style={{ background: 'none', border: 'none', color: '#fbbf24', cursor: 'pointer', padding: 0, textDecoration: 'underline', fontWeight: 700, fontSize: '0.95rem' }}
+                  style={{ background: 'none', border: 'none', color: '#f59e0b', cursor: 'pointer', padding: 0, textDecoration: 'underline', fontWeight: 600, fontSize: '0.85rem' }}
                 >
-                  {showTokenInput ? '🔑 Token Ayarlarını Gizle' : '🔑 Lichess API Token Ayarları (Sınırsız İzin İçin)'}
+                  {showTokenInput ? 'Token Ayarlarını Gizle' : 'Lichess API Token Ayarları (Sınırsız İzin İçin)'}
                 </button>
 
                 {lichessToken.trim() ? (
-                  <span style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '0.3rem 0.85rem', borderRadius: '20px', fontSize: '0.85rem', border: '1px solid rgba(16, 185, 129, 0.4)', fontWeight: 700 }}>
-                    ✓ Lichess Token Kayıtlı (Sınırsız Sorgulama Aktif)
+                  <span style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '0.25rem 0.75rem', borderRadius: '14px', fontSize: '0.8rem', border: '1px solid rgba(16, 185, 129, 0.25)', fontWeight: 600 }}>
+                    ✓ Token Kayıtlı (Sınırsız İsteğe Açık)
                   </span>
                 ) : (
-                  <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+                  <span style={{ color: '#71717a', fontSize: '0.8rem' }}>
                     (İsteğe bağlı - Sınırsız sorgulama için)
                   </span>
                 )}
               </div>
 
               {showTokenInput && (
-                <div style={{ marginTop: '0.75rem', background: 'rgba(245, 158, 11, 0.08)', padding: '1.1rem 1.25rem', borderRadius: '12px', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
-                  <p style={{ color: '#e2e8f0', marginBottom: '0.75rem', fontSize: '0.95rem', lineHeight: '1.5' }}>
-                    Lichess sunucularında anonim (token'sız) sorgularda API istekleri sınırlıdır. <a href="https://lichess.org/account/oauth/token" target="_blank" rel="noreferrer" style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline' }}>Buraya tıklayarak 10 saniyede ücretsiz Lichess API Token alabilirsiniz.</a> Token tarayıcınıza bir kez kaydedilir ve PC kapansa bile sonraki açılışlarda otomatik kullanılır.
+                <div style={{ marginTop: '0.65rem', background: '#18181b', padding: '1rem 1.15rem', borderRadius: '8px', border: '1px solid #27272a' }}>
+                  <p style={{ color: '#a1a1aa', marginBottom: '0.65rem', fontSize: '0.85rem', lineHeight: '1.45' }}>
+                    Lichess sunucularında anonim sorgular sınırlıdır. <a href="https://lichess.org/account/oauth/token" target="_blank" rel="noreferrer" style={{ color: '#f59e0b', fontWeight: 600, textDecoration: 'underline' }}>Buradan 10 saniyede ücretsiz Lichess API Token alabilirsiniz.</a> Token tarayıcınıza bir kez kaydedilir ve kalıcı olarak kullanılır.
                   </p>
-                  <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <div style={{ display: 'flex', gap: '0.65rem' }}>
                     <input
                       type="password"
                       className="input-field"
-                      style={{ flex: 1, fontSize: '0.95rem', padding: '0.75rem 1rem', background: 'rgba(0, 0, 0, 0.4)', color: '#ffffff', border: '1px solid rgba(245, 158, 11, 0.4)' }}
+                      style={{ flex: 1, fontSize: '0.85rem', padding: '0.65rem 0.85rem' }}
                       placeholder="Lichess Personal Access Token yapıştırın (lip_...)"
                       value={lichessToken}
                       onChange={(e) => setLichessToken(e.target.value)}
@@ -189,7 +188,7 @@ export default function App() {
                       <button
                         type="button"
                         onClick={() => setLichessToken('')}
-                        style={{ background: 'rgba(244, 63, 94, 0.2)', border: '1px solid rgba(244, 63, 94, 0.5)', color: '#f87171', padding: '0.6rem 1.2rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 700 }}
+                        style={{ background: 'rgba(244, 63, 94, 0.15)', border: '1px solid rgba(244, 63, 94, 0.4)', color: '#f43f5e', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
                       >
                         Sil
                       </button>
@@ -201,56 +200,54 @@ export default function App() {
           )}
 
           {error && (
-            <div style={{ color: '#f43f5e', padding: '1rem', background: 'rgba(244, 63, 94, 0.12)', borderRadius: '10px', border: '1px solid rgba(244, 63, 94, 0.3)', marginTop: '0.75rem', fontSize: '0.95rem', lineHeight: '1.4' }}>
+            <div style={{ color: '#f43f5e', padding: '0.85rem 1rem', background: 'rgba(244, 63, 94, 0.1)', borderRadius: '8px', border: '1px solid rgba(244, 63, 94, 0.25)', fontSize: '0.9rem', lineHeight: '1.4' }}>
               ⚠️ {error}
             </div>
           )}
         </div>
 
-        {/* Dashboard Results Section */}
+        {/* Results Section */}
         {data && (
           <>
-            {/* Hero Player Archetype & Top GM Match Header */}
+            {/* Player Archetype Header */}
             {data.gm_similarity && (
-              <div className="glass-panel" style={{ padding: '1.75rem', background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(99, 102, 241, 0.12) 100%)', border: '1px solid rgba(245, 158, 11, 0.35)', boxShadow: '0 0 35px rgba(245, 158, 11, 0.15)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+              <div className="panel-card" style={{ padding: '1.5rem', background: '#121215', border: '1px solid #27272a' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.25rem' }}>
                   <div>
-                    <span style={{ fontSize: '0.85rem', color: '#fbbf24', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-                      👑 OYUNCU KİMLİĞİ (ARCHETYPE)
+                    <span style={{ fontSize: '0.75rem', color: '#f59e0b', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
+                      OYUNCU KİMLİĞİ (ARCHETYPE)
                     </span>
-                    <h2 style={{ fontSize: '2.1rem', fontWeight: 900, color: '#fff', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                    <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#fafafa', marginTop: '0.2rem' }}>
                       {data.gm_similarity.archetype.badge}
                     </h2>
-                    <p style={{ color: '#cbd5e1', fontSize: '1.05rem', marginTop: '0.4rem', maxWidth: '650px' }}>
+                    <p style={{ color: '#a1a1aa', fontSize: '0.95rem', marginTop: '0.3rem' }}>
                       {data.gm_similarity.archetype.tagline}
                     </p>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                    {/* Top GM Match Pill */}
-                    <div className="metric-card" style={{ background: 'rgba(0, 0, 0, 0.4)', border: '1px solid rgba(245, 158, 11, 0.4)', padding: '1.1rem 1.75rem', borderRadius: '16px' }}>
-                      <div className="metric-label" style={{ color: '#94a3b8' }}>En Çok Benzeyen Büyükusta</div>
-                      <div className="metric-value" style={{ fontSize: '1.9rem', color: '#fbbf24' }}>
+                    <div className="metric-card" style={{ background: '#18181b', border: '1px solid #27272a', padding: '0.85rem 1.4rem' }}>
+                      <div className="metric-label">En Çok Benzeyen Büyükusta</div>
+                      <div className="metric-value" style={{ fontSize: '1.6rem', color: '#f59e0b' }}>
                         %{primaryGM.similarity_pct} {primaryGM.name}
                       </div>
-                      <div style={{ fontSize: '0.85rem', color: '#cbd5e1', marginTop: '0.2rem', fontWeight: 600 }}>{primaryGM.title}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#71717a', marginTop: '0.15rem' }}>{primaryGM.title}</div>
                     </div>
 
-                    {/* Export Report Buttons */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button
                         type="button"
                         onClick={() => printPDFReport()}
-                        style={{ background: 'rgba(245, 158, 11, 0.2)', border: '1px solid rgba(245, 158, 11, 0.5)', color: '#fbbf24', padding: '0.6rem 1.1rem', borderRadius: '10px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'all 0.2s' }}
+                        style={{ background: '#18181b', border: '1px solid #3f3f46', color: '#fafafa', padding: '0.55rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
                       >
-                        📄 PDF Raporu İndir
+                        📄 PDF Raporu
                       </button>
                       <button
                         type="button"
                         onClick={() => exportMarkdownReport(data)}
-                        style={{ background: 'rgba(99, 102, 241, 0.2)', border: '1px solid rgba(99, 102, 241, 0.5)', color: '#818cf8', padding: '0.6rem 1.1rem', borderRadius: '10px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'all 0.2s' }}
+                        style={{ background: '#18181b', border: '1px solid #3f3f46', color: '#fafafa', padding: '0.55rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
                       >
-                        📝 Markdown Raporu
+                        📝 Markdown
                       </button>
                     </div>
                   </div>
@@ -270,11 +267,11 @@ export default function App() {
               </div>
               <div className="metric-card">
                 <div className="metric-value">%{data.profile.summary.avg_accuracy_pct}</div>
-                <div className="metric-label">Ort. Hamle Doğruluğu</div>
+                <div className="metric-label">Ort. Doğruluk</div>
               </div>
               <div className="metric-card">
                 <div className="metric-value">{data.profile.summary.acpl}</div>
-                <div className="metric-label">Ort. Centipawn Loss (ACPL)</div>
+                <div className="metric-label">Centipawn Loss (ACPL)</div>
               </div>
               <div className="metric-card">
                 <div className="metric-value">{data.profile.summary.blunders_per_game}</div>
@@ -282,14 +279,14 @@ export default function App() {
               </div>
             </div>
 
-            {/* Dashboard View Filter Tabs */}
+            {/* View Filter Tabs */}
             <div className="dashboard-tabs">
               <button
                 type="button"
                 className={`tab-btn ${activeTab === 'all' ? 'active' : ''}`}
                 onClick={() => setActiveTab('all')}
               >
-                📌 Tüm Analizler (Full Intel)
+                📌 Tüm Analizler
               </button>
               <button
                 type="button"
@@ -321,44 +318,44 @@ export default function App() {
               </button>
             </div>
 
-            {/* Tactical Weaknesses Breakdown Widget */}
+            {/* Tactical Weaknesses Breakdown */}
             {tactical && (activeTab === 'all' || activeTab === 'profile') && (
-              <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                <h2 className="card-title" style={{ fontSize: '1.2rem', color: '#fbbf24' }}>
-                  🎯 Taktik Zayıflık Dağılımı (Hangi Tuzaklara Düşüyor?)
+              <div className="panel-card" style={{ padding: '1.25rem' }}>
+                <h2 className="card-title" style={{ fontSize: '1.05rem', color: '#fafafa' }}>
+                  🎯 Taktik Zayıflık Dağılımı
                 </h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.85rem', marginTop: '0.85rem' }}>
-                  <div className="metric-card" style={{ background: 'rgba(255,255,255,0.02)', textAlign: 'left', padding: '0.85rem 1rem' }}>
-                    <div style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 600 }}>🧲 Açgözlü Taş Alma</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 800, color: tactical.capture_blunders > 0 ? '#f43f5e' : '#10b981', marginTop: '0.2rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.75rem', marginTop: '0.75rem' }}>
+                  <div className="metric-card" style={{ background: '#18181b', textAlign: 'left', padding: '0.75rem 0.9rem' }}>
+                    <div style={{ color: '#a1a1aa', fontSize: '0.75rem', fontWeight: 600 }}>🧲 Açgözlü Taş Alma</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 800, color: tactical.capture_blunders > 0 ? '#f43f5e' : '#10b981', marginTop: '0.2rem' }}>
                       {tactical.capture_blunders} Blunder
                     </div>
                   </div>
 
-                  <div className="metric-card" style={{ background: 'rgba(255,255,255,0.02)', textAlign: 'left', padding: '0.85rem 1rem' }}>
-                    <div style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 600 }}>⚔️ Çatal (Fork) Hataları</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 800, color: tactical.fork_blunders > 0 ? '#f43f5e' : '#10b981', marginTop: '0.2rem' }}>
+                  <div className="metric-card" style={{ background: '#18181b', textAlign: 'left', padding: '0.75rem 0.9rem' }}>
+                    <div style={{ color: '#a1a1aa', fontSize: '0.75rem', fontWeight: 600 }}>⚔️ Çatal (Fork) Hataları</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 800, color: tactical.fork_blunders > 0 ? '#f43f5e' : '#10b981', marginTop: '0.2rem' }}>
                       {tactical.fork_blunders} Blunder
                     </div>
                   </div>
 
-                  <div className="metric-card" style={{ background: 'rgba(255,255,255,0.02)', textAlign: 'left', padding: '0.85rem 1rem' }}>
-                    <div style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 600 }}>📌 Açmaz (Pin) Hataları</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 800, color: tactical.pin_blunders > 0 ? '#f43f5e' : '#10b981', marginTop: '0.2rem' }}>
+                  <div className="metric-card" style={{ background: '#18181b', textAlign: 'left', padding: '0.75rem 0.9rem' }}>
+                    <div style={{ color: '#a1a1aa', fontSize: '0.75rem', fontWeight: 600 }}>📌 Açmaz (Pin) Hataları</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 800, color: tactical.pin_blunders > 0 ? '#f43f5e' : '#10b981', marginTop: '0.2rem' }}>
                       {tactical.pin_blunders} Blunder
                     </div>
                   </div>
 
-                  <div className="metric-card" style={{ background: 'rgba(255,255,255,0.02)', textAlign: 'left', padding: '0.85rem 1rem' }}>
-                    <div style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 600 }}>🔍 Açarak Saldırı Hataları</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 800, color: tactical.discovered_blunders > 0 ? '#f43f5e' : '#10b981', marginTop: '0.2rem' }}>
+                  <div className="metric-card" style={{ background: '#18181b', textAlign: 'left', padding: '0.75rem 0.9rem' }}>
+                    <div style={{ color: '#a1a1aa', fontSize: '0.75rem', fontWeight: 600 }}>🔍 Açarak Saldırı</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 800, color: tactical.discovered_blunders > 0 ? '#f43f5e' : '#10b981', marginTop: '0.2rem' }}>
                       {tactical.discovered_blunders} Blunder
                     </div>
                   </div>
 
-                  <div className="metric-card" style={{ background: 'rgba(255,255,255,0.02)', textAlign: 'left', padding: '0.85rem 1rem' }}>
-                    <div style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 600 }}>♛ Vezir Kırışma Kabulü</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fbbf24', marginTop: '0.2rem' }}>
+                  <div className="metric-card" style={{ background: '#18181b', textAlign: 'left', padding: '0.75rem 0.9rem' }}>
+                    <div style={{ color: '#a1a1aa', fontSize: '0.75rem', fontWeight: 600 }}>♛ Vezir Kırışma Kabulü</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f59e0b', marginTop: '0.2rem' }}>
                       {tactical.queen_trades_accepted} Maç
                     </div>
                   </div>
@@ -366,63 +363,63 @@ export default function App() {
               </div>
             )}
 
-            {/* Opening Repertoire & Weakness Matrix Section */}
+            {/* Opening Repertoire Section */}
             {data.profile.repertoire && (activeTab === 'all' || activeTab === 'opening') && (
-              <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                <h2 className="card-title" style={{ fontSize: '1.25rem', color: '#fbbf24' }}>
+              <div className="panel-card" style={{ padding: '1.25rem' }}>
+                <h2 className="card-title" style={{ fontSize: '1.1rem', color: '#fafafa' }}>
                   ♟️ Açılış Repertuarı & Zayıflık Haritası
                 </h2>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.85rem', marginTop: '0.85rem' }}>
                   {/* White Repertoire */}
-                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '1.1rem', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-                    <h3 style={{ fontSize: '0.95rem', color: '#f8fafc', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700 }}>
+                  <div style={{ background: '#18181b', padding: '1rem', borderRadius: '8px', border: '1px solid #27272a' }}>
+                    <h3 style={{ fontSize: '0.85rem', color: '#fafafa', marginBottom: '0.65rem', fontWeight: 700 }}>
                       ⚪ En Çok Oynanan (Beyaz)
                     </h3>
                     {data.profile.repertoire.white_top && data.profile.repertoire.white_top.length > 0 ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                         {data.profile.repertoire.white_top.map((item, idx) => (
-                          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#cbd5e1', background: 'rgba(255,255,255,0.04)', padding: '0.5rem 0.75rem', borderRadius: '6px' }}>
+                          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#a1a1aa', background: '#27272a', padding: '0.4rem 0.65rem', borderRadius: '4px' }}>
                             <span>{item.name}</span>
-                            <span style={{ fontWeight: 800, color: '#fbbf24' }}>{item.count} oyun</span>
+                            <span style={{ fontWeight: 700, color: '#fafafa' }}>{item.count} oyun</span>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Veri yetersiz.</div>
+                      <div style={{ fontSize: '0.8rem', color: '#71717a' }}>Veri yetersiz.</div>
                     )}
                   </div>
 
                   {/* Black Repertoire */}
-                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '1.1rem', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-                    <h3 style={{ fontSize: '0.95rem', color: '#f8fafc', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700 }}>
+                  <div style={{ background: '#18181b', padding: '1rem', borderRadius: '8px', border: '1px solid #27272a' }}>
+                    <h3 style={{ fontSize: '0.85rem', color: '#fafafa', marginBottom: '0.65rem', fontWeight: 700 }}>
                       ⚫ En Çok Oynanan (Siyah)
                     </h3>
                     {data.profile.repertoire.black_top && data.profile.repertoire.black_top.length > 0 ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                         {data.profile.repertoire.black_top.map((item, idx) => (
-                          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#cbd5e1', background: 'rgba(255,255,255,0.04)', padding: '0.5rem 0.75rem', borderRadius: '6px' }}>
+                          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#a1a1aa', background: '#27272a', padding: '0.4rem 0.65rem', borderRadius: '4px' }}>
                             <span>{item.name}</span>
-                            <span style={{ fontWeight: 800, color: '#818cf8' }}>{item.count} oyun</span>
+                            <span style={{ fontWeight: 700, color: '#fafafa' }}>{item.count} oyun</span>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Veri yetersiz.</div>
+                      <div style={{ fontSize: '0.8rem', color: '#71717a' }}>Veri yetersiz.</div>
                     )}
                   </div>
 
-                  {/* Weakest Openings (Vulnerability Alert) */}
-                  <div style={{ background: 'rgba(244, 63, 94, 0.08)', padding: '1.1rem', borderRadius: '12px', border: '1px solid rgba(244, 63, 94, 0.3)' }}>
-                    <h3 style={{ fontSize: '0.95rem', color: '#f43f5e', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700 }}>
+                  {/* Weakest Openings */}
+                  <div style={{ background: 'rgba(244, 63, 94, 0.05)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(244, 63, 94, 0.2)' }}>
+                    <h3 style={{ fontSize: '0.85rem', color: '#f43f5e', marginBottom: '0.65rem', fontWeight: 700 }}>
                       ⚠️ En Çok Zorlandığı 3 Açılış
                     </h3>
                     {data.profile.repertoire.weakest_openings && data.profile.repertoire.weakest_openings.length > 0 ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.57rem' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                         {data.profile.repertoire.weakest_openings.map((item, idx) => (
-                          <div key={idx} style={{ display: 'flex', flexDirection: 'column', fontSize: '0.8rem', background: 'rgba(244, 63, 94, 0.12)', padding: '0.5rem 0.75rem', borderRadius: '6px', borderLeft: '3px solid #f43f5e' }}>
-                            <div style={{ fontWeight: 800, color: '#fff', fontSize: '0.85rem' }}>{item.eco} - {item.name}</div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.2rem', color: '#fca5a5' }}>
+                          <div key={idx} style={{ display: 'flex', flexDirection: 'column', fontSize: '0.75rem', background: 'rgba(244, 63, 94, 0.1)', padding: '0.45rem 0.65rem', borderRadius: '4px', borderLeft: '2px solid #f43f5e' }}>
+                            <div style={{ fontWeight: 700, color: '#fafafa', fontSize: '0.8rem' }}>{item.eco} - {item.name}</div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.15rem', color: '#fca5a5' }}>
                               <span>Kazanma: %{item.win_rate_pct}</span>
                               <span>ACPL: {item.acpl}</span>
                             </div>
@@ -430,7 +427,7 @@ export default function App() {
                         ))}
                       </div>
                     ) : (
-                      <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Veri yetersiz.</div>
+                      <div style={{ fontSize: '0.8rem', color: '#71717a' }}>Veri yetersiz.</div>
                     )}
                   </div>
                 </div>
@@ -439,86 +436,86 @@ export default function App() {
 
             {/* Blunder Timing Distribution Panel */}
             {timing && (activeTab === 'all' || activeTab === 'timing') && (
-              <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                <h2 className="card-title" style={{ fontSize: '1.25rem', color: '#fbbf24' }}>
-                  ⏱️ Hata Zamanlama Dağılımı (Hangi Hamlede Çöküyor?)
+              <div className="panel-card" style={{ padding: '1.25rem' }}>
+                <h2 className="card-title" style={{ fontSize: '1.1rem', color: '#fafafa' }}>
+                  ⏱️ Hata Zamanlama Dağılımı
                 </h2>
 
-                <div style={{ background: 'rgba(245, 158, 11, 0.1)', borderLeft: '4px solid #f59e0b', padding: '0.95rem 1.25rem', borderRadius: '8px', marginTop: '0.75rem', marginBottom: '1.25rem' }}>
-                  <div style={{ fontWeight: 800, color: '#fbbf24', fontSize: '0.95rem' }}>
+                <div style={{ background: 'rgba(245, 158, 11, 0.08)', borderLeft: '3px solid #f59e0b', padding: '0.85rem 1rem', borderRadius: '6px', marginTop: '0.65rem', marginBottom: '1rem' }}>
+                  <div style={{ fontWeight: 700, color: '#f59e0b', fontSize: '0.9rem' }}>
                     Baskın Çöküş Fazı: {timing.peak_phase}
                   </div>
-                  <div style={{ color: '#e2e8f0', fontSize: '0.85rem', marginTop: '0.2rem' }}>
+                  <div style={{ color: '#a1a1aa', fontSize: '0.85rem', marginTop: '0.15rem' }}>
                     {timing.peak_description}
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.85rem' }}>
                   {/* Opening Phase Moves 1-15 */}
-                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.9rem', color: '#f8fafc', fontWeight: 600 }}>
+                  <div style={{ background: '#18181b', padding: '0.85rem', borderRadius: '8px', border: '1px solid #27272a' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.85rem', color: '#fafafa', fontWeight: 600 }}>
                       <span>Açılış (Hamle 1 - 15)</span>
-                      <span style={{ color: '#818cf8', fontWeight: 800 }}>%{timing.opening_pct}</span>
+                      <span style={{ color: '#f59e0b', fontWeight: 700 }}>%{timing.opening_pct}</span>
                     </div>
-                    <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.08)', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ width: `${timing.opening_pct}%`, height: '100%', background: '#818cf8', borderRadius: '4px' }}></div>
+                    <div style={{ width: '100%', height: '6px', background: '#27272a', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: `${timing.opening_pct}%`, height: '100%', background: '#f59e0b', borderRadius: '3px' }}></div>
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '0.4rem' }}>{timing.opening_blunders} toplam blunder</div>
+                    <div style={{ fontSize: '0.75rem', color: '#71717a', marginTop: '0.35rem' }}>{timing.opening_blunders} blunder</div>
                   </div>
 
                   {/* Midgame Phase Moves 16-30 */}
-                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.9rem', color: '#f8fafc', fontWeight: 600 }}>
+                  <div style={{ background: '#18181b', padding: '0.85rem', borderRadius: '8px', border: '1px solid #27272a' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.85rem', color: '#fafafa', fontWeight: 600 }}>
                       <span>Orta Oyun (Hamle 16 - 30)</span>
-                      <span style={{ color: '#fbbf24', fontWeight: 800 }}>%{timing.midgame_pct}</span>
+                      <span style={{ color: '#f59e0b', fontWeight: 700 }}>%{timing.midgame_pct}</span>
                     </div>
-                    <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.08)', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ width: `${timing.midgame_pct}%`, height: '100%', background: '#fbbf24', borderRadius: '4px' }}></div>
+                    <div style={{ width: '100%', height: '6px', background: '#27272a', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: `${timing.midgame_pct}%`, height: '100%', background: '#f59e0b', borderRadius: '3px' }}></div>
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '0.4rem' }}>{timing.midgame_blunders} toplam blunder</div>
+                    <div style={{ fontSize: '0.75rem', color: '#71717a', marginTop: '0.35rem' }}>{timing.midgame_blunders} blunder</div>
                   </div>
 
                   {/* Late Game Phase Moves 31+ */}
-                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.9rem', color: '#f8fafc', fontWeight: 600 }}>
+                  <div style={{ background: '#18181b', padding: '0.85rem', borderRadius: '8px', border: '1px solid #27272a' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.85rem', color: '#fafafa', fontWeight: 600 }}>
                       <span>Oyun Sonu (Hamle 31+)</span>
-                      <span style={{ color: '#f43f5e', fontWeight: 800 }}>%{timing.late_pct}</span>
+                      <span style={{ color: '#f43f5e', fontWeight: 700 }}>%{timing.late_pct}</span>
                     </div>
-                    <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.08)', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ width: `${timing.late_pct}%`, height: '100%', background: '#f43f5e', borderRadius: '4px' }}></div>
+                    <div style={{ width: '100%', height: '6px', background: '#27272a', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: `${timing.late_pct}%`, height: '100%', background: '#f43f5e', borderRadius: '3px' }}></div>
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '0.4rem' }}>{timing.late_blunders} toplam blunder</div>
+                    <div style={{ fontSize: '0.75rem', color: '#71717a', marginTop: '0.35rem' }}>{timing.late_blunders} blunder</div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Main Dual Column Layout */}
+            {/* Main Layout Grid */}
             {(activeTab === 'all' || activeTab === 'profile' || activeTab === 'strategy') && (
               <div className="analytics-grid">
                 {/* Left Column: Player Profile Radar & Behavioral Indicators */}
                 {(activeTab === 'all' || activeTab === 'profile') && (
-                  <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div className="panel-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <h2 className="card-title" style={{ margin: 0, fontSize: '1.2rem' }}>📊 {data.target_username} vs {primaryGM?.name}</h2>
+                      <h2 className="card-title" style={{ margin: 0, fontSize: '1.05rem' }}>📊 {data.target_username} vs {primaryGM?.name}</h2>
                       <button 
                         type="button"
                         onClick={() => setShowGMOverlay(!showGMOverlay)}
-                        style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid var(--border-color)', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
+                        style={{ background: '#18181b', border: '1px solid #27272a', color: '#fafafa', padding: '0.35rem 0.75rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}
                       >
                         {showGMOverlay ? '👁️ Sadece Oyuncuyu Göster' : '⚔️ GM Kıyaslamasını Aç'}
                       </button>
                     </div>
 
-                    <div style={{ width: '100%', height: 320 }}>
+                    <div style={{ width: '100%', height: 300 }}>
                       <ResponsiveContainer>
                         <RadarChart cx="50%" cy="50%" outerRadius="75%" data={getRadarData(data.profile.scores, primaryGM?.gm_scores)}>
-                          <PolarGrid stroke="rgba(255,255,255,0.12)" />
-                          <PolarAngleAxis dataKey="subject" stroke="#94a3b8" tick={{ fill: '#e2e8f0', fontSize: 11, fontWeight: 600 }} />
-                          <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="rgba(255,255,255,0.1)" />
-                          <Radar name={data.target_username} dataKey="Oyuncu" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.4} />
+                          <PolarGrid stroke="#27272a" />
+                          <PolarAngleAxis dataKey="subject" stroke="#a1a1aa" tick={{ fill: '#a1a1aa', fontSize: 10, fontWeight: 500 }} />
+                          <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#27272a" />
+                          <Radar name={data.target_username} dataKey="Oyuncu" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.35} />
                           {showGMOverlay && (
-                            <Radar name={primaryGM?.name} dataKey="GM" stroke="#818cf8" fill="#818cf8" fillOpacity={0.25} />
+                            <Radar name={primaryGM?.name} dataKey="GM" stroke="#71717a" fill="#71717a" fillOpacity={0.2} />
                           )}
                           <Legend />
                         </RadarChart>
@@ -527,54 +524,54 @@ export default function App() {
 
                     {/* Behavioral & Manipulation Indicators */}
                     <div>
-                      <h3 style={{ fontSize: '1.05rem', color: '#fbbf24', marginTop: '0.5rem', marginBottom: '0.75rem', fontWeight: 800 }}>
+                      <h3 style={{ fontSize: '0.95rem', color: '#fafafa', marginTop: '0.4rem', marginBottom: '0.65rem', fontWeight: 700 }}>
                         🎭 Psikolojik & Manipülasyon Göstergeleri
                       </h3>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                        <div className="metric-card" style={{ textAlign: 'left', padding: '0.85rem 1rem' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.65rem' }}>
+                        <div className="metric-card" style={{ textAlign: 'left', padding: '0.75rem 0.85rem' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span className="metric-label" style={{ fontWeight: 700 }}>Greed (Açgözlülük)</span>
-                            <span className="metric-value" style={{ fontSize: '1.25rem', color: data.profile.scores.GreedIndex > 50 ? '#f43f5e' : '#10b981' }}>
+                            <span className="metric-label" style={{ fontWeight: 600 }}>Greed (Açgözlülük)</span>
+                            <span className="metric-value" style={{ fontSize: '1.15rem', color: data.profile.scores.GreedIndex > 50 ? '#f43f5e' : '#10b981' }}>
                               %{data.profile.scores.GreedIndex}
                             </span>
                           </div>
-                          <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.3rem', lineHeight: '1.3' }}>
+                          <p style={{ fontSize: '0.75rem', color: '#71717a', marginTop: '0.2rem', lineHeight: '1.25' }}>
                             Zehirli piyonlara veya sahte feda tuzaklarına düşme meyli.
                           </p>
                         </div>
 
-                        <div className="metric-card" style={{ textAlign: 'left', padding: '0.85rem 1rem' }}>
+                        <div className="metric-card" style={{ textAlign: 'left', padding: '0.75rem 0.85rem' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span className="metric-label" style={{ fontWeight: 700 }}>Moral Çöküş Riski</span>
-                            <span className="metric-value" style={{ fontSize: '1.25rem', color: data.profile.scores.CascadeBlunderRisk > 30 ? '#f43f5e' : '#10b981' }}>
+                            <span className="metric-label" style={{ fontWeight: 600 }}>Moral Çöküş Riski</span>
+                            <span className="metric-value" style={{ fontSize: '1.15rem', color: data.profile.scores.CascadeBlunderRisk > 30 ? '#f43f5e' : '#10b981' }}>
                               %{data.profile.scores.CascadeBlunderRisk}
                             </span>
                           </div>
-                          <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.3rem', lineHeight: '1.3' }}>
+                          <p style={{ fontSize: '0.75rem', color: '#71717a', marginTop: '0.2rem', lineHeight: '1.25' }}>
                             İlk hatadan sonraki 3 hamlede 2. dev hatayı yapma riski.
                           </p>
                         </div>
 
-                        <div className="metric-card" style={{ textAlign: 'left', padding: '0.85rem 1rem' }}>
+                        <div className="metric-card" style={{ textAlign: 'left', padding: '0.75rem 0.85rem' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span className="metric-label" style={{ fontWeight: 700 }}>Post-Loss Tilt</span>
-                            <span className="metric-value" style={{ fontSize: '1.25rem', color: data.profile.scores.TiltIndex > 30 ? '#f43f5e' : '#10b981' }}>
+                            <span className="metric-label" style={{ fontWeight: 600 }}>Post-Loss Tilt</span>
+                            <span className="metric-value" style={{ fontSize: '1.15rem', color: data.profile.scores.TiltIndex > 30 ? '#f43f5e' : '#10b981' }}>
                               %{data.profile.scores.TiltIndex}
                             </span>
                           </div>
-                          <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.3rem', lineHeight: '1.3' }}>
+                          <p style={{ fontSize: '0.75rem', color: '#71717a', marginTop: '0.2rem', lineHeight: '1.25' }}>
                             Mağlubiyet ardından oynanan maçta aşırı risk ve hata meyli.
                           </p>
                         </div>
 
-                        <div className="metric-card" style={{ textAlign: 'left', padding: '0.85rem 1rem' }}>
+                        <div className="metric-card" style={{ textAlign: 'left', padding: '0.75rem 0.85rem' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span className="metric-label" style={{ fontWeight: 700 }}>Post-Win Özgüven</span>
-                            <span className="metric-value" style={{ fontSize: '1.25rem', color: '#fbbf24' }}>
+                            <span className="metric-label" style={{ fontWeight: 600 }}>Post-Win Özgüven</span>
+                            <span className="metric-value" style={{ fontSize: '1.15rem', color: '#f59e0b' }}>
                               %{data.profile.scores.OverconfidenceIndex}
                             </span>
                           </div>
-                          <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.3rem', lineHeight: '1.3' }}>
+                          <p style={{ fontSize: '0.75rem', color: '#71717a', marginTop: '0.2rem', lineHeight: '1.25' }}>
                             Galibiyet ardından oynanan maçta dikkatsiz risk alma sıklığı.
                           </p>
                         </div>
@@ -585,29 +582,29 @@ export default function App() {
 
                 {/* Right Column: GM Rankings & Exploitation Blueprint */}
                 {(activeTab === 'all' || activeTab === 'strategy' || activeTab === 'profile') && (
-                  <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  <div className="panel-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
                     {/* GM Match Rankings */}
                     {data.gm_similarity && (
                       <div>
-                        <h2 className="card-title" style={{ fontSize: '1.15rem' }}>🏆 Efsanevi GM Benzerlik Sıralaması</h2>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.75rem' }}>
+                        <h2 className="card-title" style={{ fontSize: '1.05rem' }}>🏆 Büyükusta Stil Benzerliği Listesi</h2>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginTop: '0.65rem' }}>
                           {data.gm_similarity.top_matches.map((gm) => (
-                            <div key={gm.id} style={{ background: 'rgba(255,255,255,0.03)', padding: '0.85rem 1.1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                                <span style={{ fontWeight: 700, color: '#fff' }}>{gm.name} <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>({gm.title})</span></span>
-                                <span style={{ fontWeight: 800, color: gm.similarity_pct > 75 ? '#fbbf24' : '#818cf8' }}>%{gm.similarity_pct}</span>
+                            <div key={gm.id} style={{ background: '#18181b', padding: '0.75rem 0.9rem', borderRadius: '8px', border: '1px solid #27272a' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                                <span style={{ fontWeight: 600, color: '#fafafa', fontSize: '0.85rem' }}>{gm.name} <span style={{ fontSize: '0.75rem', color: '#71717a' }}>({gm.title})</span></span>
+                                <span style={{ fontWeight: 700, color: gm.similarity_pct > 75 ? '#f59e0b' : '#a1a1aa', fontSize: '0.85rem' }}>%{gm.similarity_pct}</span>
                               </div>
-                              <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden' }}>
-                                <div style={{ width: `${gm.similarity_pct}%`, height: '100%', background: gm.similarity_pct > 75 ? 'var(--gold-gradient)' : '#6366f1', borderRadius: '3px' }}></div>
+                              <div style={{ width: '100%', height: '5px', background: '#27272a', borderRadius: '3px', overflow: 'hidden' }}>
+                                <div style={{ width: `${gm.similarity_pct}%`, height: '100%', background: gm.similarity_pct > 75 ? '#f59e0b' : '#71717a', borderRadius: '3px' }}></div>
                               </div>
-                              <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '0.4rem' }}>{gm.description}</div>
+                              <div style={{ fontSize: '0.75rem', color: '#71717a', marginTop: '0.3rem' }}>{gm.description}</div>
                             </div>
                           ))}
                         </div>
                       </div>
                     )}
 
-                    <h2 className="card-title" style={{ color: '#fbbf24' }}>🎯 Rakip Manipülasyon Rehberi (Exploitation Blueprint)</h2>
+                    <h2 className="card-title" style={{ color: '#fafafa', fontSize: '1.05rem' }}>🎯 Rakip Manipülasyon Rehberi (Exploitation Blueprint)</h2>
 
                     <div className="strategy-item strategy-insight">
                       <strong>Özet Scouting Değerlendirmesi:</strong> {data.counter_strategy.summary_statement}
@@ -615,11 +612,11 @@ export default function App() {
 
                     {/* Exploitation Steps */}
                     <div>
-                      <h3 style={{ fontSize: '1.05rem', color: '#fbbf24', marginBottom: '0.75rem', fontWeight: 700 }}>🔥 Adım Adım Rakibi Oyundan Düşürme Planı</h3>
+                      <h3 style={{ fontSize: '0.95rem', color: '#f59e0b', marginBottom: '0.65rem', fontWeight: 700 }}>🔥 Adım Adım Rakibi Oyundan Düşürme Planı</h3>
                       <div className="strategy-list">
                         {data.counter_strategy.exploitation_steps && data.counter_strategy.exploitation_steps.length > 0 ? (
                           data.counter_strategy.exploitation_steps.map((step, idx) => (
-                            <div key={idx} className="strategy-item" style={{ background: 'rgba(245, 158, 11, 0.08)', borderLeft: '4px solid #f59e0b' }}>
+                            <div key={idx} className="strategy-item strategy-insight">
                               <span dangerouslySetInnerHTML={{ __html: step.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                             </div>
                           ))
@@ -630,12 +627,12 @@ export default function App() {
                     </div>
 
                     {/* DOs and DONTs */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem' }}>
                       <div>
-                        <h3 style={{ fontSize: '0.95rem', color: '#10b981', marginBottom: '0.5rem', fontWeight: 700 }}>✅ Yapılacaklar (DOs)</h3>
+                        <h3 style={{ fontSize: '0.85rem', color: '#10b981', marginBottom: '0.4rem', fontWeight: 700 }}>✅ Yapılacaklar (DOs)</h3>
                         <div className="strategy-list">
                           {data.counter_strategy.dos.map((item, idx) => (
-                            <div key={idx} className="strategy-item strategy-do" style={{ fontSize: '0.85rem' }}>
+                            <div key={idx} className="strategy-item strategy-do">
                               • {item}
                             </div>
                           ))}
@@ -643,10 +640,10 @@ export default function App() {
                       </div>
 
                       <div>
-                        <h3 style={{ fontSize: '0.95rem', color: '#f43f5e', marginBottom: '0.5rem', fontWeight: 700 }}>❌ Kaçınılacaklar (DON'Ts)</h3>
+                        <h3 style={{ fontSize: '0.85rem', color: '#f43f5e', marginBottom: '0.4rem', fontWeight: 700 }}>❌ Kaçınılacaklar (DON'Ts)</h3>
                         <div className="strategy-list">
                           {data.counter_strategy.donts.map((item, idx) => (
-                            <div key={idx} className="strategy-item strategy-dont" style={{ fontSize: '0.85rem' }}>
+                            <div key={idx} className="strategy-item strategy-dont">
                               • {item}
                             </div>
                           ))}
